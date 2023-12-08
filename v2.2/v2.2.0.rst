@@ -76,7 +76,7 @@ Updates
 
 * Improve the logging output and structure for the Audit service
 * If an audit event is about more than one resource, we add the Pod Data Subject of each resource in the instrument field. 
-* The provisioned-pod-access-control event  Storage information was moved from the object section to the instrument section of the audit message.
+* The provisioned-pod-access-control event Storage information was moved from the object section to the instrument section of the audit message.
 
 None
 ~~~~
@@ -121,7 +121,7 @@ Authorization
 Updates
 ~~~~~~~
 
-* The provisioned-pod-access-control event  Storage information was moved from the object section to the instrument section of the audit message.
+* The provisioned-pod-access-control event Storage information was moved from the object section to the instrument section of the audit message.
 * Improve logging output and structure for the Authorization service
 
 Bugs fixed
@@ -145,7 +145,7 @@ Updates
 ~~~~~~~
 
 * **For the Start service, a new configuration setting (``QUARKUS_OIDC_TOKEN_STATE_MANAGER_ENCRYPTION_SECRET``) is now required with a minimum length of 32 characters.**
-* Use new OpenTelemetry Sampler option to turn traces on and off.   Previous used ``QUARKUS_OPENTELEMETRY_TRACER_EXPORTER_OTLP_ENABLED`` no longer exists.  Instead, use the runtime variable: ``QUARKUS_OTEL_TRACES_SAMPLER_ARG``. ``0.0`` is the default and turns off trace. Set ``QUARKUS_OTEL_TRACES_SAMPLER_ARG`` to ``1.0`` to turn on trace; i.e., ``QUARKUS_OTEL_TRACES_SAMPLER_ARG=1.0``.
+* Use new OpenTelemetry Sampler option to turn traces on and off. Previously used ``QUARKUS_OPENTELEMETRY_TRACER_EXPORTER_OTLP_ENABLED`` no longer exists. Instead, use the runtime variable: ``QUARKUS_OTEL_TRACES_SAMPLER_ARG``. ``0.0`` is the default and turns off trace. Set ``QUARKUS_OTEL_TRACES_SAMPLER_ARG`` to ``1.0`` to turn on trace; i.e., ``QUARKUS_OTEL_TRACES_SAMPLER_ARG=1.0``.
 * **ESS uses three-element version descriptors (instead of two-element version descriptors) for its Kubernetes images; e.g., ``2.2.<num>`` instead of ``2.2``.  For more information, see :ref:`2.2-versioning`.**
 
 Notifications
@@ -219,46 +219,33 @@ Updates
 Internal
 --------
 
-* aws-auth in kube-system is divergent from role in Terraform
 * Internal Server Error on malformed content types
 * Duplicate audit message when running multiple instances of the audit server
 * ess-fragments-ingest logging warning about quarkus.datasource.reconciliator.metrics.enabled
 * Storage Service fails to reject container payloads that modify resource metadata statements
-* Upgrade Wiremock to 2.35.0
 * Meaningless provision error when over Pod limit
 * This should not be an error: intermediate parent is not a container resource
-* Clean up old CloudSmith entitlement tokens
 * ess-pod-provision - Undefined prefix: pim
-* ess-registration can be removed if we wish
-* Home
-* Demonstrate image scanning results are being captured and responded to
 * jena logging content from inside docs during indexing
-* AllState PoC (standalone)
-* Setup new repo
 * Minimal Authorization DB code
 * Minimal Fragments DB code
 * Minimal Storage DB code
 * Create CLI application
 * Minimal logic code
 * Integrate Audit
-* Design Audit messages
-* Create CRON job in envs
 * Add new simulation to Gatling
 * Consume WebID list
 * Pass DB credentials
 * Observe App conecting to DBs
 * Write deletion logic
 * Observe
-* Extract CronJob from envs to microservices
 * Configure Audit
 * Observe Audit
 * Integrate Structured Logging
 * Refine Job Config
-* Tighten Repo security
 * Refine Deletion Logic for new Config
 * Minimal VC DB Code
 * Delete everything from Storage ID
-* CVE-2022-41723 in quay.io/strimzi/kafka
 * Use implicit transactions
 * Use encrypted file input
 * Investigate metrics not showing on Sysdig
@@ -266,48 +253,19 @@ Internal
 * Remove gRPC client health check in ess-pod-storage (and any other service that has this health check)
 * Investigate missing Sysdig metrics (re:bis)
 * Audit Access Grant VCs
-* Should there be labels in CronJobs
 * Audit Pods
 * Feed encrypted files to Kustomize
-* Even more fuzzing
 * Investigate slow deletion times for VCs
-* Backport mypy fix in microservices
 * Optimize VC Deletion Query
 * Update README
-* Read access to internal repos for Pete
 * Storage fails to parse some subject nodes in server-managed triples filter
-* Design: Logging
 * Include kustomize replacement for INRUPT_UMA_VC_ISSUER_ALLOW_LIST
 * Update consumers of Wrapping to new group Id
-* Stabilization: Logging is going in to overage and we don't know why
-* CVE-2022-45688 in quay.io/strimzi/kafka
-* CVE-2023-27561 in index.docker.io/library/postgres
-* Determine the TTFB for 98% of GET requests against ESS on the Orange Cloud
-* 2023-05-23 TF Updates
-* 2023-05-30 TF Updates
-* Determine what we need to do about ODRL Access Grant/Requests in 2.1
-* Undo manual hack of MTLS_KEYSTORE_PASSWORD
 * Prevent ODRL access grants from been issued and block access to new endpoints
-* Check ESS works with Kubernetes 1.27
-* Mezmo keeps going into overage
 * Audit logs cuts off after two minutes when sending to syslog
-* 2023-06-06 TF Updates
-* 2023-06-13 TF Updates
-* Decommission the pentest-2023-q1 environment
-* Design: Access Grant Default Expiration Value
-* Remove RAW_REPOSITORY_TOKEN from enterprise-microservices
 * What is the minimum version of Kubernetes supported by ESS 2.1?
 * Audit Access Grant/Request has been deleted
-* Harmonize on workflows v5
-* w/c 2023-06-19 security updates on source repos
-* w/c 2023-06-26 security updates on source repos
-* w/c 2023-07-03 security updates on source repos
-* CVE-2022-45690 affects strimzi-kafka
-* CVE-2022-45689 in strimzi
 * Move to kind 0.20
-* Consume inrupt/workflows without WORKFLOWS_SSH_KEY
-* CVE-2023-34455: org.xerial.snappy.snappy-java-1.1.8.4
-* microservices build has failed 6 times and is blocking all other builds
 * Logging: Refactoring
 * Logging: enterprise-acp
 * Logging: enterprise-report-browser
@@ -317,5 +275,41 @@ Internal
 * Logging: enterprise-reconciliator
 * enterprise-quarkus-extensions
 * enterprise-components
-* Certificate expiry is a bit too trigger happy, reduce to 10 days
 * Evaluate security implication of serving HTML directly from a Pod
+* Branch Components
+* Update audit events to clearly describe WebId and ClientId
+* E2E failure on Kafka 2.3: An agents can specify the grantee using the "isProvidedToController" predicate
+* Migrate to modern Titanium for JSON-LD
+* Small UI bug on Client Registration app
+* Better maven structure for OWASP scans
+* Remove H2 database app in OpenID project
+* Pod Data Enricher metrics
+* Audit event enrichment fallback if Pod system resources don't exist yet
+* Audit event enrichment caching
+* Resource reconciliation of Pod System resource
+* Remove unused OWASP analysis tools 
+* audit enricher is not processing messages
+* Audit Enricher validation of resource before searching the database
+* Rename event observability key in audit
+* Code clean up
+* Components: Create module
+* Components: Integrate Matthieu's prototype
+* Components: Integrate Samu's Reactive Messaging addendum
+* Reflector: Split module
+* Runtime: Create module
+* Logging: Populate from baggage
+* Logging: Configuration
+* Audit: Populate from baggage
+* Propagator: Configuration
+* Reflector: Configuration
+* Audit: Configuration
+* Propagator: Split module
+* Runtime: JAX-RS IT
+* Runtime: Reactive messaging IT
+* Audit: AS Collection & content builder support
+* Audit: Remodel
+* Components: Reword config
+* Audit Enricher handing of unknown exceptions
+* Add to BOM
+* Remove name binding
+* JCL: Create configuration for integration tests

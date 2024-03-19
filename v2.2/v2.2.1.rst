@@ -1,0 +1,76 @@
+.. _v2.2.1: 
+
+v2.2.1
+======
+
+*Released 2024-03-19*
+
+
+v2.2.1 Access Grants
+--------------------
+
+
+Updates
+~~~~~~~
+
+* Breaking change. To allow an operator to restrict which clients can issue and revoke Access Credentials by type, the ``INRUPT_VC_CLIENT_ID_ALLOW_LIST`` has been removed and replaced with (**now required**) client allow lists based on  particular Access Credential type : ``INRUPT_VC_CLIENT_ID_ALLOW_LIST_SOLIDACCESSREQUEST`` and ``INRUPT_VC_CLIENT_ID_ALLOW_LIST_SOLIDACCESSGRANT``.  With this change, a new overlay input file ``ess-verifiable-credentials-client-type-allow-list.env`` has been added for setting the **now required** configurations. See :ref:`2.2.1-ag-service-client-allow-lists` and :ref:`2.2.1-inputs-changes`.
+* Improve validation of UMA tokens
+
+v2.2.1 QPF
+----------
+
+
+Updates
+~~~~~~~
+
+* Improve validation of UMA tokens
+
+v2.2.1 Storage
+--------------
+
+
+Updates
+~~~~~~~
+
+* Improve validation of UMA tokens
+
+v2.2.1 Audit
+------------
+
+
+Removals
+~~~~~~~~
+
+* Removed rsyslog base. Refer to your company's policies w.r.t. syslog preferences and practices.  In addition, ``INRUPT_AUDIT_SYSLOG_PROTOCOL`` default value has changed from ``TCP`` to ``SSL_TCP``.
+
+Updates
+~~~~~~~
+
+* The name property of the instrument that represents Application-defined request metadata in audit messages now has the value 'Application-Defined Request Metadata' instead of 'Application Defined Request Metadata'.
+
+v2.2.1 Authorization
+--------------------
+
+
+Updates
+~~~~~~~
+
+* Removed resource URI from exception message and changed log record `AUTHORIZATION000032` from ERROR to DEBUG severity.
+
+v2.2.1 OpenID
+-------------
+
+
+Removals
+~~~~~~~~
+
+* Text and link to PodBrowser removed from OpenID home page and Start (onboarding) application.
+
+v2.2.1 Start
+------------
+
+
+Removals
+~~~~~~~~
+
+* Text and link to PodBrowser removed from OpenID home page and Start (onboarding) application.

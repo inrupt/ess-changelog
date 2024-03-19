@@ -1,0 +1,281 @@
+.. _v2.2.0: 
+
+v2.2.0
+======
+
+*Released: 2024-03-19* 
+
+
+v2.2.0 Access Grants
+--------------------
+
+
+Updates
+~~~~~~~
+
+* Use ``365D`` (365 days) as the default duration of access requests/grants.  See :ref:`2.2-ag-default-duration` for more information.
+* Internal JSON-LD processing during access credentials validation has been optimized.
+* Improve logging output and structure for the Access Grant service
+* When a client requests a status list resource from the Access Grant service, the corresponding audit message now has a more accurate text description
+
+Bugs fixed
+~~~~~~~~~~
+
+* To have VC service endpoints support UMA authentication, the missing `aud` claim (with value set to VC service's base URI)  has been added to the UMA Access Tokens. Backported to 2.1.
+* Disallow reactivation of revoked access requests/grants. See :ref:`2.2-disallow-reactivation-ag` for details.
+* The CORS headers on the Access Service endpoints now include the `WWW-Authenticate` headers. This results in a browser client to be able to discover the UMA server on a 401 response.
+* If a client tries to revoke the status of an unknown credential, the Access Grant service will now return a 404 error response with an appropriate error message. Previously in 2.1, this resulted in a 500 error response and an Null Pointer Exception in the log.
+
+Additions
+~~~~~~~~~
+
+* The Access Grant service now produces audit events when an access credential is issued
+* The Access Grant service now produces audit events when an access credential is retrieved
+* The Access Grant service now produces audit events when a credential is revoked
+* The Access Grant service now produces audit events when a client interacts with the validation endpoint
+* Audit logs are now produced when access grants are used to access a resource
+* The Access Grant service now produces audit events when a client interacts with the status endpoint
+* The AccessGrant service now produces audit events during startup and shutdown
+* The audit events from the Access Grant service  include OpenTelemetry (observability) information that can be used to correlate audit logs.
+* An audit event is emitted by the Access Grant service in response to authorization enforcement
+* Access Grant audits contain now the Resource information in the Object field.
+* Authorization Management Component for Access Grants flow.
+
+v2.2.0 UMA
+----------
+
+
+Bugs fixed
+~~~~~~~~~~
+
+* To have VC service endpoints support UMA authentication, the missing `aud` claim (with value set to VC service's base URI)  has been added to the UMA Access Tokens. Backported to 2.1.
+* The UMA service's mechanism for validating Access Grants from ESS 2.0 was updated to use the correct URL path on the Access Grant service
+
+Updates
+~~~~~~~
+
+* Improve logging output and structure for the UMA service
+* The ``uma-token-created`` audit event summary has been updated.
+
+v2.2.0 Audit
+------------
+
+
+Additions
+~~~~~~~~~
+
+* Access Grant audits contain now the Resource information in the Object field.
+* Various audit events now include client ID values, identifying the application in use. See :ref:`2.2-audit-events-clientid` for details.
+* The ``agent`` information has been added to the ``acr_created``, ``acr_deleted``, ``provisioned-pod-access-control``, ``deprovisioned-pod-access-control``  events.
+* Audit event that come from actions performed on the Pod (for example: resource create, update and deleted audit events) will now be enriched with the Pod Data Subject.
+* If upgrading from an earlier ESS version, a migration is performed to create a System resource (containing information about the Pod Data Subject) for every existing Pod.  See :ref:`2.2-pod-migration`.
+* A new Audit Enricher service has been added. The new service populates various Pod related audit messages with the associated Pod information. See :ref:`2.2-audit-enricher`.
+* Audit events from the Fragments service have been updated to contain Pod Storage metadata
+* For Audit Correlation, the overlay input file ``kafka-credentials.env`` includes a new configuration ``INRUPT_KAFKA_AUDITV1EVENTSPRODUCERENCRYPTED_CIPHER_PASSWORD`` that must be set. See also :ref:`2.2-inputs-changes`.
+* If an audit event is about more than one resource, we add the Pod Data Subject of each resource in the instrument field. 
+
+Updates
+~~~~~~~
+
+* Improved the log output from the Audit Logger service. The audit event is now part of the structured section of the log.
+* The `acr-update` is now a Pod Audit event and will contain the Pod Data Subject.
+* The provisioned-pod-access-control event Storage information was moved from the object section to the instrument section of the audit message.
+* The Audit logger service has changed the format of the logs it produces to JSON. Also the audit event is now in structured argument section of the log instead of message section as it was previously. 
+
+Removals
+~~~~~~~~
+
+* An unused component supporting unencrypted audit messages has been removed.
+
+v2.2.0 QPF
+----------
+
+
+Additions
+~~~~~~~~~
+
+* Audit events from the Fragments service have been updated to contain Pod Storage metadata
+
+Bugs fixed
+~~~~~~~~~~
+
+* Resiliency of the fragments (qpf) indexer has been improved.
+* The Fragments service was susceptible to a bug related to integer overflows in an ID column, including the marshaling of  that data to and from the database. The service now supports larger-sized integers throughout the database and code.
+* The postgres persistence layer of the QPF service has been updated to  support larger integer values, allowing the application to support more data
+* ``ingest-succeeded`` audit event will be sent only when indexing actually succeeded.  Previously, the event was sent even when the indexer did not have access to the resource and failed to ingest the resource for indexing.
+
+Updates
+~~~~~~~
+
+* Improve logging output and structure for the Query service
+
+v2.2.0 Deployment
+-----------------
+
+
+Removals
+~~~~~~~~
+
+* An unused component supporting unencrypted audit messages has been removed.
+
+Updates
+~~~~~~~
+
+* Move to a new Kubernetes registry (https://kubernetes.io/blog/2022/11/28/registry-k8s-io-faster-cheaper-ga/) to ensure we can continue to pull utility images.
+* A clearer warning is now presented from inrupt-kustomizer that the standalone version of ESS must not be used in production.
+* Deprecation: configuring an ESS installation via environment variables is deprecated, and support will be removed in v2.3.0. Configuration via :ref:`inputs  <install-initialization>` remains the supported approach.
+
+Bugs fixed
+~~~~~~~~~~
+
+* Fixed reference to inrupt-kustomizer to add the required extra digit in the readme.
+
+v2.2.0 ESS
+----------
+
+
+Additions
+~~~~~~~~~
+
+* For Audit Correlation, the overlay input file ``kafka-credentials.env`` includes a new configuration ``INRUPT_KAFKA_AUDITV1EVENTSPRODUCERENCRYPTED_CIPHER_PASSWORD`` that must be set. See also :ref:`2.2-inputs-changes`.
+* Service configuration is now logged upon service startup. See :ref:`2.2-logging`.
+* Enable configuring startup config logger. See :ref:`2.2-logging`.
+* Structured fields in logs can now be redacted. See :ref:`2.2-logging`.
+* When provisioning a new Pod, the default root ACR contains policies that enable the use of Access Grants.  For details, see :ref:`2.2-ag-default-enablement`.
+* ESS services now support the propagation of application-defined request metadata from HTTP request headers into HTTP responses, log records and audit messages.  See :doc:`/administration/application-defined-metadata` for details.
+* A new configuration, ``INRUPT_REQUEST_METADATA_PROPAGATOR_HEADER_OVERRIDES``, has been introduced to manage conflicts between application-defined request metadata headers and baggage headers members. See :doc:`/administration/application-defined-metadata`.
+
+Updates
+~~~~~~~
+
+* Logging uses JSON as the default format.  Previously available ``use-json-logging-for-quarkus`` kustomization component (which turns on JSON logging) has been removed. For more information, see :ref:`2.2-logging`.
+* A new kustomization component is available to revert to non-json formatted logging.  For more information, see :ref:`2.2-logging`.
+* ESS uses three-element version descriptors (instead of two-element version descriptors) for its Kubernetes images; e.g., ``2.2.<num>`` instead of ``2.2``.  For more information, see :ref:`2.2-versioning`.
+
+Removals
+~~~~~~~~
+
+* The ingress-nginx base has been removed. We recommend you source your ingress solution directly from your chosen supplier.
+
+Bugs fixed
+~~~~~~~~~~
+
+* Both the Jena and Commons RDF implementations now correctly overwrite `Iterable` properties instead of adding the items multiple times in some edge cases.
+
+v2.2.0 Authorization
+--------------------
+
+
+Updates
+~~~~~~~
+
+* The provisioned-pod-access-control event Storage information was moved from the object section to the instrument section of the audit message.
+* Improve logging output and structure for the Authorization service
+
+Additions
+~~~~~~~~~
+
+* Client ID are normalized so that a provided 'client_id' value matches 'urn:uuid:{client_id}' in ACP. Backported to 2.1.2.
+* The authorization service explicitly refuses literals as client ID that are not a uuid. Backported to 2.1.1.
+
+Bugs fixed
+~~~~~~~~~~
+
+* The ACP server now returns a syntactically valid WWW-Authenticate HTTP header
+
+v2.2.0 Documentation
+--------------------
+
+
+Updates
+~~~~~~~
+
+* Deprecation: configuring an ESS installation via environment variables is deprecated, and support will be removed in v2.3.0. Configuration via :ref:`inputs  <install-initialization>` remains the supported approach.
+
+v2.2.0 Notifications
+--------------------
+
+
+Updates
+~~~~~~~
+
+* Improve logging output and structure for the Notification service
+
+v2.2.0 OpenID
+-------------
+
+
+Updates
+~~~~~~~
+
+* Improve logging output and structure for the OpenID service
+* The application approval screen has been updated to be more accurate and readable. 
+
+Bugs fixed
+~~~~~~~~~~
+
+* Under certain concurrent conditions, a single user account that fetches multiple OpenID sessions can encounter an error when generating a token. This change makes the server more resilient in these circumstances
+
+Additions
+~~~~~~~~~
+
+* The OpenID Broker now supports the IETF RFC 9207, which introduces an `iss` query parameter for all redirect URLs. This parameter can be used to guard against certain categories of exploits in a completely open system of Identity Providers.  Note that there is a bug in `@inrupt/solid-client-authn-node` with respect to the support of this RFC, and this feature requires version `1.17.4` or above.
+* The OpenID service now allows cross-origin DELETE requests.
+
+v2.2.0 Start
+------------
+
+
+Updates
+~~~~~~~
+
+* Handling of underlying 400 errors encountered by the start service has been improved.
+* Improve logging output and structure for the Start service
+
+Bugs fixed
+~~~~~~~~~~
+
+* The resiliency of the start service has been improved. If provisioning a Pod for the user fails, they will be asked to retry later.
+
+v2.2.0 Storage
+--------------
+
+
+Bugs fixed
+~~~~~~~~~~
+
+* OIDC ID Token whose azp claim is an array instead of a string literal are now supported. Backported to 2.1.1.
+* Reading and deleting a resource at the same time no longer results in a race condition. Under some circumstances, this could result in an incorrect state where the resource ACL could be missing.
+* Resources that are deleted and re-created within a short window no longer get incorrectly cleaned up.
+
+Additions
+~~~~~~~~~
+
+* A content-security-policy response header has been added to the storage service HTTP responses. It restricts the use of service-workers running directly from Pod-hosted HTML resources
+* Added a read and connection timeout to the HTTP request to dereference a WebID during authentication validation. This is applicable to all ESS services that do Solid JWT authentication.
+* A Pod system resource is now created on Pod provision. This change introduces a database migration to the Storage Postgres database.
+* The Content-Security-Policy (CSP) header will now be returned on on all ``GET`` requests to the Storage service. CSP settings can be configured using Quarkus HTTP configuration properties: ``QUARKUS_HTTP_HEADERS__CONTENT_SECURITY_POLICY__VALUE`` and ``QUARKUS_HTTP_HEADERS__CONTENT_SECURITY_POLICY__METHODS``.
+
+Updates
+~~~~~~~
+
+* The format of the underlying Quarkus-based S3 configuration has changed, and so the deployment YAML files have been adjusted to accommodate the new style
+
+Removals
+~~~~~~~~
+
+* StorageCreator has been removed from Storage CRUD events.
+
+v2.2.0 WebID
+------------
+
+
+Updates
+~~~~~~~
+
+* Improve logging output and structure for the WebID service
+
+Removals
+~~~~~~~~
+
+* The link to PodBrowser has been removed from the WebID Editor UI as part of Podbrowser's sunsetting.

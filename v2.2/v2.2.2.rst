@@ -1,0 +1,21 @@
+.. _v2.2.2: 
+
+v2.2.2
+======
+
+*Released: 2024-04-26* 
+
+
+v2.2.2 Deployment
+-----------------
+
+
+Bugs fixed
+~~~~~~~~~~
+
+* ess-verifiable-credentials was not using the correct service certificate for inter-service communication
+
+Updates
+~~~~~~~
+
+* The standalone environment now uses KeyCloak version 24
